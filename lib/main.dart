@@ -1,31 +1,27 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:online_grocery_app_ui/views/accountScreen.dart';
-import 'package:online_grocery_app_ui/views/beveragesScreen.dart';
-import 'package:online_grocery_app_ui/views/bottomnavigationbar.dart';
-import 'package:online_grocery_app_ui/views/exploreScreen.dart';
-import 'package:online_grocery_app_ui/views/favouriteScreen.dart';
-import 'package:online_grocery_app_ui/views/filterScreen.dart';
-import 'package:online_grocery_app_ui/views/mycartScreen.dart';
-import 'package:online_grocery_app_ui/views/orderacceptedScreen.dart';
-import 'package:online_grocery_app_ui/views/productdetailScreen.dart';
-import 'package:online_grocery_app_ui/views/searchScreen.dart';
-import 'package:online_grocery_app_ui/views/signupScreen.dart';
+import 'package:online_grocery_app_ui/routes/routename.dart';
+import 'package:online_grocery_app_ui/routes/routes.dart';
+import 'package:online_grocery_app_ui/viewmodels/explore_view_model.dart';
+import 'package:online_grocery_app_ui/viewmodels/signin_view_model.dart';
+import 'package:online_grocery_app_ui/views/loginScreen.dart';
+import 'package:provider/provider.dart';
 
-import 'views/cardScreen.dart';
-import 'views/homeScreen.dart';
-import 'views/locationScreen.dart';
-import 'views/loginScreen.dart';
-import 'views/singinScreen.dart';
-import 'views/splashScreen.dart';
-import 'views/onboardingScreen.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
-void main() {
-  runApp(MaterialApp(
-
-    theme: ThemeData(
-      scaffoldBackgroundColor: Colors.white,
-      fontFamily: 'Gilroy'
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SignInViewModel()),
+        ChangeNotifierProvider(create: (_) => ExploreViewModel()),
+      ],
+      child: MaterialApp(
+        initialRoute: AppRoute.loginScreen,
+        onGenerateRoute: generateRoute,
+        debugShowCheckedModeBanner: false,
+      ),
     ),
-    home: Onboardingscreen(),
-  ));
+  );
 }

@@ -12,13 +12,12 @@ class Productdetailscreen extends StatefulWidget {
       required this.title,
       required this.subtitle,
       required this.price,
-      required this.value});
+      });
 
   final String image;
   final String title;
   final String subtitle;
-  double price;
-  Map<String, dynamic> value;
+  String price;
 
   @override
   State<Productdetailscreen> createState() => _ProductdetailscreenState();
@@ -35,7 +34,6 @@ class _ProductdetailscreenState extends State<Productdetailscreen> {
   }
 
   void initState() {
-    isFavorite = favList.contains(widget.value);
     print(isFavorite);
     super.initState();
   }
@@ -76,18 +74,18 @@ class _ProductdetailscreenState extends State<Productdetailscreen> {
                           size: ht / 37.48,
                         ),
                         onPressed: () {
-                          if (isFavorite) {
-                            deleteFromFav(values: widget.value);
-                            _toggleFavorite();
-                          } else {
-                            _toggleFavorite();
-                            addToFav(values: widget.value);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Favouritescreen()),
-                            );
-                          }
+                          // if (isFavorite) {
+                          //   deleteFromFav(values: widget.value);
+                          //   _toggleFavorite();
+                          // } else {
+                          //   _toggleFavorite();
+                          //   addToFav(values: widget.value);
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => Favouritescreen()),
+                          //   );
+                          // }
                         },
                       )
                     ],
@@ -144,7 +142,7 @@ class _ProductdetailscreenState extends State<Productdetailscreen> {
                           )),
                       Spacer(),
                       Text(
-                        '\$${widget.price.toStringAsFixed(2)}',
+                        '\$${widget.price}',
                         style: TextStyle(
                             fontSize: ht / 37.48, fontWeight: FontWeight.bold),
                       )

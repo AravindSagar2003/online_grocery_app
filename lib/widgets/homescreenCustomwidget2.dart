@@ -7,8 +7,7 @@ class HomeScreenCustomWidget2 extends StatelessWidget {
   HomeScreenCustomWidget2(
       {super.key,
       required this.image,
-        required this.ontab,
-        required this.val,
+      required this.ontab,
       required this.title,
       required this.subtitle,
       required this.price});
@@ -17,8 +16,7 @@ class HomeScreenCustomWidget2 extends StatelessWidget {
   String image;
   String title;
   String subtitle;
-  double price;
-  Map<String,dynamic> val;
+  String price;
 
   void Function() ontab;
 
@@ -33,7 +31,7 @@ class HomeScreenCustomWidget2 extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Productdetailscreen(image: image, title: title, subtitle: subtitle,price: price,value: val,),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Productdetailscreen(image: image, title: title, subtitle: subtitle,price: price,),));
         },
         child: SizedBox(
             height: 270,
@@ -95,7 +93,7 @@ class HomeScreenCustomWidget2 extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '\$${price.toStringAsFixed(2)}' ,
+                              '\$${price}' ,
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -110,7 +108,10 @@ class HomeScreenCustomWidget2 extends StatelessWidget {
                                         BorderRadius.circular(12), // <-- Radius
                                   ),
                                 ),
-                                onPressed:ontab,
+                                onPressed:(){
+                                  
+                                  
+                                },
                                 child: Icon(
                                   Icons.add,
                                   size: 17,

@@ -100,23 +100,23 @@ class Homescreen extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.location_pin,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      '${(zone??'zone')+ ','+(area??'location')}',
-                      style: TextStyle(
-                          color: Color(
-                            0xff4C4F4D,
-                          ),
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Icon(
+                //       Icons.location_pin,
+                //       color: Colors.black,
+                //     ),
+                //     Text(
+                //       '${(zone??'zone')+ ','+(area??'location')}',
+                //       style: TextStyle(
+                //           color: Color(
+                //             0xff4C4F4D,
+                //           ),
+                //           fontWeight: FontWeight.bold),
+                //     )
+                //   ],
+                // ),
                 SizedBox(
                   height: 15,
                 ),
@@ -132,14 +132,14 @@ class Homescreen extends StatelessWidget {
                   ),
                 ),
 
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: wt/1.12,
-                          height: ht/7.82,
-                          child:  Image.asset('asset/images/banner.png')
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Container(
+                      //     width: wt/1.12,
+                      //     height: ht/7.82,
+                      //     child:  Image.asset('asset/images/banner.png')
+                      //   ),
+                      // ),
 
 
                       HomeScreenCustomWidget(
@@ -154,7 +154,6 @@ class Homescreen extends StatelessWidget {
                     itemCount: list1.length,
                     itemBuilder: (context, index) {
                       return HomeScreenCustomWidget2(
-                        val: list1[index],
                         ontab: () {
                           addToCart(values:list1[index]);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Mycartscreen(),));
@@ -164,7 +163,7 @@ class Homescreen extends StatelessWidget {
                         image: list1[index]['image'],
                         title: list1[index]['title'],
                         subtitle: list1[index]['subtitle'],
-                        price: list1[index]['price'],
+                        price: list1[index]['price'].toString(),
 
                       );
                     },
@@ -188,7 +187,6 @@ class Homescreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return HomeScreenCustomWidget2(
-                        val: list2[index],
                         ontab: () {
                           addToCart(values:list2[index]);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Mycartscreen(),));
@@ -197,7 +195,7 @@ class Homescreen extends StatelessWidget {
                           image: list2[index]['image'],
                           title: list2[index]['title'],
                           subtitle: list2[index]['subtitle'],
-                        price: list2[index]['price'],
+                        price: list2[index]['price'].toString(),
                       );
                     },
                   ),
@@ -259,7 +257,6 @@ class Homescreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return  HomeScreenCustomWidget2(
-                        val: list3[index],
                         ontab: (){
                           addToCart(values:list3[index]);
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Mycartscreen(),));
@@ -267,7 +264,7 @@ class Homescreen extends StatelessWidget {
                               image: list3[index]['image'],
                               title: list3[index]['title'],
                               subtitle: list3[index]['subtitle'],
-                        price: list3[index]['price'],
+                        price: list3[index]['price'].toString(),
                       );
 
                     },

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'accountScreen.dart';
 import 'exploreScreen.dart';
-import 'favouriteScreen.dart';
 import 'homeScreen.dart';
 import 'mycartScreen.dart';
 import 'searchScreen.dart';
@@ -33,7 +32,6 @@ class _BottomnavigationbarState extends State<Bottomnavigationbar> {
       ExploreScreen(),
       // Searchscreen(),
       Mycartscreen(),
-      Favouritescreen(),
       Accountscreen()
     ]
     );
@@ -87,7 +85,6 @@ class _BottomnavigationbarState extends State<Bottomnavigationbar> {
             BottomNavigationBarItem(label: 'Shop', icon: Icon(Icons.shopping_bag_outlined,color: Colors.black,)),
             BottomNavigationBarItem(label: 'Explore', icon: Icon(Icons.manage_search,color: Colors.black,)),
             BottomNavigationBarItem(label: 'Cart', icon: Icon(Icons.shopping_cart_outlined,color: Colors.black,)),
-            BottomNavigationBarItem(label: 'Favourites', icon: Icon(Icons.favorite_outline_sharp,color: Colors.black,)),
             BottomNavigationBarItem(label: 'Account', icon: Icon(Icons.account_box_outlined,color: Colors.black,))
           ],
             selectedLabelStyle: TextStyle(color: Colors.black),
