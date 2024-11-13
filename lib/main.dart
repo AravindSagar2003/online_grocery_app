@@ -18,7 +18,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ExploreViewModel()),
       ],
       child: MaterialApp(
-        initialRoute: AppRoute.loginScreen,
+        initialRoute: AppRoute.bottomNavigationBar,
         onGenerateRoute: generateRoute,
         debugShowCheckedModeBanner: false,
       ),

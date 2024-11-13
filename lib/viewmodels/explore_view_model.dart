@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_grocery_app_ui/models/categorymodel.dart';
 import 'package:online_grocery_app_ui/models/productmodel.dart';
 import 'package:online_grocery_app_ui/services/category_category.dart';
+
 import 'package:online_grocery_app_ui/services/product_service.dart';
 
 class ExploreViewModel extends ChangeNotifier {
@@ -13,6 +14,8 @@ class ExploreViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
+  bool _isDisposed = false; // Track if the ViewModel has been disposed
+
   List<Data> get categories => _categories;
   List<Product> get products => _products;
   bool get isLoading => _isLoading;
@@ -23,23 +26,28 @@ class ExploreViewModel extends ChangeNotifier {
   }
 
   Future<void> fetchCategories() async {
+    if (_isDisposed) return; // Prevent further operations if disposed
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
       Category categoryResponse = await _categoryService.fetchCategories();
+      if (_isDisposed) return; // Check if the ViewModel is disposed
       _categories = categoryResponse.data ?? [];
     } catch (error) {
+      if (_isDisposed) return; // Check if the ViewModel is disposed
       _errorMessage = error.toString();
     } finally {
+      if (_isDisposed) return; // Check if the ViewModel is disposed
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  // New function to fetch products by category ID
+  // Fetch products by category ID with disposal check
   Future<void> fetchProductsByCategory(int categoryId) async {
+    if (_isDisposed) return; // Prevent further operations if disposed
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -47,10 +55,18 @@ class ExploreViewModel extends ChangeNotifier {
     try {
       _products = await _productService.fetchProductsByCategory(categoryId);
     } catch (error) {
+      if (_isDisposed) return; // Check if the ViewModel is disposed
       _errorMessage = error.toString();
     } finally {
+      if (_isDisposed) return; // Check if the ViewModel is disposed
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true; // Mark as disposed
+    super.dispose();
   }
 }
