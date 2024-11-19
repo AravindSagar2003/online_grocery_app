@@ -10,6 +10,31 @@ class Mycartscreen extends StatefulWidget {
   @override
   State<Mycartscreen> createState() => _MycartscreenState();
 }
+// Mock cart list
+List<Map<String, dynamic>> cartList = [
+  {
+    'image': 'asset/images/banana.png',
+    'title': 'Fresh Apple',
+    'subtitle': '1 kg',
+    'price': 2.99,
+    'quantity': 2,
+  },
+  {
+    'image': 'asset/images/banana.png',
+    'title': 'Banana',
+    'subtitle': '1 dozen',
+    'price': 1.99,
+    'quantity': 3,
+  },
+  {
+    'image': 'asset/images/banana.png',
+    'title': 'Milk',
+    'subtitle': '1 liter',
+    'price': 1.49,
+    'quantity': 1,
+  },
+];
+
 
 class _MycartscreenState extends State<Mycartscreen> {
   // Method to calculate total cost of the cart

@@ -24,7 +24,7 @@ class _LoginscreenState extends State<Loginscreen> {
   String? errorpass;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     final ht = MediaQuery.of(context).size.height;
     final wt = MediaQuery.of(context).size.width;
 
@@ -103,7 +103,7 @@ class _LoginscreenState extends State<Loginscreen> {
                           fixedSize: Size(364, 67),
                           backgroundColor: Color(0xff53B175),
                         ),
-                        onPressed: () {
+                        onPressed: () async{
                           // Validate email and password
                           error = validateEmail(value: email_controller.text);
                           errorpass = validatePassword(password: password_controller.text);
@@ -112,11 +112,13 @@ class _LoginscreenState extends State<Loginscreen> {
                           // If no validation errors, proceed to login
                           if (error == null && errorpass == null) {
                             print('lohgeeen');
-                            viewModel.login(
+                           await  viewModel.login(
                               email: email_controller.text,
                               password: password_controller.text,
                               context: context,
                             );
+
+                            
                           }
                         },
                         child: Text(

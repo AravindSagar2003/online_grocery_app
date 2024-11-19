@@ -9,21 +9,24 @@ class Searchscreen extends StatefulWidget {
 }
 
 class _SearchscreenState extends State<Searchscreen> {
-  // Sample data for the grid
+  // Sample data for the grid, including productId
   final List<Map<String, dynamic>> items = [
     {
+      'productId': '1',  // Added productId
       'image': 'asset/images/eggChicken.png',
       'title': 'Egg Chicken Red',
       'subtitle': '4pcs, Price',
       'price': 1.99,
     },
     {
+      'productId': '2',  // Added productId
       'image': 'asset/images/broccoli.png',
       'title': 'Fresh Broccoli',
       'subtitle': '500g, Price',
       'price': 2.50,
     },
     {
+      'productId': '3',  // Added productId
       'image': 'asset/images/apple.png',
       'title': 'Red Apple',
       'subtitle': '1kg, Price',
@@ -105,14 +108,15 @@ class _SearchscreenState extends State<Searchscreen> {
                 itemBuilder: (BuildContext context, int index) {
                   final item = filteredItems[index];
                   return HomeScreenCustomWidget2(
+                    productId: item['productId'],  // Pass productId to the widget
                     ontab: () {
-                      // Define your tap action here
-                      print("Tapped on item $index");
+                      // Define your tap action here (e.g., navigate to product detail screen)
+                      print("Tapped on item ${item['productId']}");
                     },
                     image: item['image'],
                     title: item['title'],
                     subtitle: item['subtitle'],
-                    price: item['price'],
+                    price: item['price'].toString(),  // Ensure price is passed as string
                   );
                 },
               ),

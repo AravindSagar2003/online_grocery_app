@@ -130,7 +130,7 @@ class _SignupscreenState extends State<Signupscreen> {
                         context: context,
                       );
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Homescreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductListScreen()));
                     },
                     child: Text(
                       'Sign Up',

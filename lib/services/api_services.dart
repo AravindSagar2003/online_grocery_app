@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:online_grocery_app_ui/utils/api_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   // Function to register a user
@@ -54,6 +55,10 @@ class ApiService {
     };
 
     try {
+
+      print('dddddddddddddd');
+
+
       // Make the HTTP POST request
       final response = await http.post(
         Uri.parse(url),
@@ -62,9 +67,17 @@ class ApiService {
           'Content-Type': 'application/json', // Specify JSON content-type
         },
       );
+      print(response.body);
+      
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
+
+        print(data);
+
+        
+        SharedPreferences prefs=await SharedPreferences.getInstance();
+        await prefs.setString('login_id',data['data']['login_id'].toString());
         return data['data'] ?? {}; // Return user data as a map
       } else {
         String message = jsonDecode(response.body)['message'] ?? 'Failed to login';

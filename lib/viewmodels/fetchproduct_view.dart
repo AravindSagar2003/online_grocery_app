@@ -44,4 +44,5 @@ class Detailsviewmodel extends ChangeNotifier {
       notifyListeners();
     }
   }
+  
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:online_grocery_app_ui/views/productdetailScreen.dart';
 import 'package:online_grocery_app_ui/widgets/productcard.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/explore_view_model.dart';
 import '../widgets/homescreenCustomwidget2.dart';
+  // Import the details screen
 
 class Beveragesscreen extends StatefulWidget {
   final int categoryId;
@@ -52,27 +54,34 @@ class _BeveragesscreenState extends State<Beveragesscreen> {
             else
               Expanded(
                 child: GridView.builder(
-  itemCount: viewModel.products.length,
-  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    crossAxisSpacing: 8,
-    mainAxisSpacing: 8,
-    childAspectRatio: .6,
-  ),
-  itemBuilder: (context, index) {
-    final product = viewModel.products[index];
-    return ProductCard(
-      ontab: () {
-        // Add your navigation or onTap logic here
-      },
-      image: product.image,
-      title: product.productName,
-      subtitle: '${product.price} ml, Price',
-      price: product.price,
-    );
-  },
-),
-
+                  itemCount: viewModel.products.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    childAspectRatio: .6,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product = viewModel.products[index];
+                    return ProductCard(
+                      ontab: () {
+                        // Navigate to the product details screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsScreen(
+                              productId: product.id, product: product,  // Pass the product ID to the details screen
+                            ),
+                          ),
+                        );
+                      },
+                      image: product.image,
+                      title: product.productName,
+                      subtitle: '${product.price} ml, Price',
+                      price: product.price,
+                    );
+                  },
+                ),
               ),
           ],
         ),

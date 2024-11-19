@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:online_grocery_app_ui/routes/routename.dart';
 import 'package:online_grocery_app_ui/services/api_services.dart';
 import 'package:online_grocery_app_ui/views/bottomnavigationbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
 
 class SignInViewModel with ChangeNotifier {
@@ -22,6 +23,12 @@ class SignInViewModel with ChangeNotifier {
       _errorMessage = 'Error: ${e.toString()}';
     }
     notifyListeners();
+  }
+
+  Future<String?>saveLoginState(bool isLoggedin)async{
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedin', isLoggedin);
+    return prefs.getString('userId');
   }
 
   void signOut() async {
@@ -67,6 +74,7 @@ class SignInViewModel with ChangeNotifier {
     required BuildContext context,
   }) async {
     try {
+      
       final userData = await ApiService().loginUser(
         email: email,
         password: password,
@@ -79,6 +87,9 @@ class SignInViewModel with ChangeNotifier {
             content: Text('Login successful'),
           ),
         );
+
+      SharedPreferences prefs= await SharedPreferences.getInstance();
+      String? userid=prefs.getString('login_id');
         
         Navigator.pushReplacement(
           context,
