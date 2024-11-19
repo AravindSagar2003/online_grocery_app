@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:online_grocery_app_ui/services/add_to_cart.dart';
-
+import 'package:provider/provider.dart'; // Import provider package
+import 'package:shared_preferences/shared_preferences.dart';
+import '../viewmodels/cart_view_model.dart';
 import '../widgets/custombuttonWidget.dart';
 import 'orderacceptedScreen.dart';
 
@@ -10,49 +11,21 @@ class Mycartscreen extends StatefulWidget {
   @override
   State<Mycartscreen> createState() => _MycartscreenState();
 }
-// Mock cart list
-List<Map<String, dynamic>> cartList = [
-  {
-    'image': 'asset/images/banana.png',
-    'title': 'Fresh Apple',
-    'subtitle': '1 kg',
-    'price': 2.99,
-    'quantity': 2,
-  },
-  {
-    'image': 'asset/images/banana.png',
-    'title': 'Banana',
-    'subtitle': '1 dozen',
-    'price': 1.99,
-    'quantity': 3,
-  },
-  {
-    'image': 'asset/images/banana.png',
-    'title': 'Milk',
-    'subtitle': '1 liter',
-    'price': 1.49,
-    'quantity': 1,
-  },
-];
-
 
 class _MycartscreenState extends State<Mycartscreen> {
-  // Method to calculate total cost of the cart
-  double getTotalCost() {
-    double total = 0.0;
-    for (var item in cartList) {
-      total += item['price'] * item['quantity'];
-    }
-    return total;
-  }
+  @override
+  void initState() {
+    super.initState();
 
-  // Method to remove an item from the cart
-  void removeItemFromCart(int index) {
-    if (index >= 0 && index < cartList.length) {
-      setState(() {
-        cartList.toList().removeAt(index); // Directly remove the item from the cart list
-      });
-    }
+    // Fetch cart items when the screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+
+      final cartViewModel = Provider.of<CartViewModel>(context, listen: false);
+
+SharedPreferences prefs= await SharedPreferences.getInstance();
+                  String ? log_id =await prefs.getString('login_id');
+      cartViewModel.fetchCartItems(int.parse(log_id!)); // Replace '1' with the actual user ID
+    });
   }
 
   @override
@@ -62,293 +35,127 @@ class _MycartscreenState extends State<Mycartscreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            const Text(
-              'My Cart',
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xff181725),
-                  fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Divider(
-              height: 5,
-            ),
-            Expanded(
-              child: cartList.isEmpty
-                  ? Center(
-                      child: Text('No items in the cart'),
-                    )
-                  : ListView.builder(
-                      itemCount: cartList.length,
-                      itemBuilder: (context, index) {
-                        int itemCount = cartList.elementAt(index)['quantity'];
-                        double itemPrice = cartList.elementAt(index)['price'];
-                        double totalPrice = itemPrice * itemCount;
+        child: Consumer<CartViewModel>(
+          builder: (context, cartViewModel, child) {
+            final cartItems = cartViewModel.cartItems;
+            final isLoading = cartViewModel.isLoading;
 
-                        return Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    cartList.elementAt(index)['image'],
-                                  ),
-                                  const SizedBox(
-                                    width: 25,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+            return Column(
+              children: [
+                const SizedBox(height: 50),
+                const Text(
+                  'My Cart',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Color(0xff181725),
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 30),
+                const Divider(height: 5),
+                Expanded(
+                  child: isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : cartItems.isEmpty
+                          ? const Center(child: Text('No items in the cart'))
+                          : ListView.builder(
+                              itemCount: cartItems.length,
+                              itemBuilder: (context, index) {
+                                final item = cartItems[index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
                                     children: [
-                                      Text(
-                                        cartList.elementAt(index)['title'],
-                                        style: const TextStyle(
-                                            color: Color(0xff181725),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        cartList.elementAt(index)['subtitle'],
-                                        style: const TextStyle(
-                                            color: Color(0xff7C7C7C),
-                                            fontSize: 14),
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
                                       Row(
                                         children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                if (cartList.elementAt(index)['quantity'] > 1) {
-                                                  cartList.elementAt(index)['quantity']--;
-                                                }
-                                              });
-                                            },
-                                            child: const Icon(
-                                              Icons.remove,
-                                              color: Color(0xffB3B3B3),
-                                              size: 20,
-                                            ),
+                                          Image.network(
+                                            item.image!, // Assuming productImage is a URL
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
                                           ),
-                                          const SizedBox(width: 15),
-                                          Container(
-                                            height: ht / 22.48,
-                                            width: wt / 10.29,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: Colors.black12),
-                                              borderRadius: BorderRadius.circular(5),
-                                            ),
-                                            child: Center(
-                                              child: Text('$itemCount'),
-                                            ),
+                                          const SizedBox(width: 25),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                item.productname!,
+                                                style: const TextStyle(
+                                                    color: Color(0xff181725),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                             
+                                              const SizedBox(height: 15),
+                                              Row(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      // cartViewModel
+                                                      //     .decrementItemQuantity(
+                                                      //         item.productid,
+                                                      //         '1'); // Replace '1' with actual user ID
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.remove,
+                                                      color: Color(0xffB3B3B3),
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 15),
+                                                  Text(item.quantity.toString()),
+                                                  const SizedBox(width: 15),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      // cartViewModel
+                                                      //     .incrementItemQuantity(
+                                                      //         item.productid,
+                                                      //         '1'); // Replace '1' with actual user ID
+                                                    },
+                                                    child: const Icon(
+                                                      Icons.add,
+                                                      color: Colors.green,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(width: 15),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                cartList.elementAt(index)['quantity']++;
-                                              });
+                                          const Spacer(),
+                                          Text(
+                                            '\$${item.price}',
+                                            style: const TextStyle(
+                                                color: Color(0xff181725),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.close),
+                                            onPressed: () {
+                                              cartViewModel.removeItemFromCart(
+                                                  int.parse(item.userid!));
                                             },
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: Colors.green,
-                                              size: 20,
-                                            ),
                                           ),
                                         ],
                                       ),
+                                      const SizedBox(height: 15),
+                                      const Divider(height: 5),
                                     ],
                                   ),
-                                  const Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          removeItemFromCart(index); // Remove item from cart on tap
-                                        },
-                                        child: const Icon(
-                                          Icons.close,
-                                          color: Color(0xffB3B3B3),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 50),
-                                      Text(
-                                        '\$ ${totalPrice.toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                            color: Color(0xff181725),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              const Divider(
-                                height: 5,
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-            ),
-            CustomButtonWidget(
-              text: 'Go To Checkout',
-              action: () {
-                double totalCost = getTotalCost();
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) => Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Checkout',
-                                style: TextStyle(
-                                    fontSize: ht / 37.48,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              const Spacer(),
-                              const Icon(Icons.close),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(height: 5),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Text(
-                                'Delivery',
-                                style: TextStyle(
-                                    color: Color(0xff7C7C7C), fontSize: 18),
-                              ),
-                              const Spacer(),
-                              const Text(
-                                'Select Method',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              const Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(height: 5),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Text(
-                                'Payment',
-                                style: TextStyle(
-                                    color: Color(0xff7C7C7C), fontSize: 18),
-                              ),
-                              const Spacer(),
-                              const Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(height: 5),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Text(
-                                'Promo Code',
-                                style: TextStyle(
-                                    color: Color(0xff7C7C7C), fontSize: 18),
-                              ),
-                              const Spacer(),
-                              const Text(
-                                'Pick Discount',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              const Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(height: 5),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Text(
-                                'Total cost',
-                                style: TextStyle(
-                                    color: Color(0xff7C7C7C), fontSize: 18),
-                              ),
-                              const Spacer(),
-                              Text(
-                                '\$${totalCost.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
-                              ),
-                              const Icon(Icons.arrow_forward_ios_rounded),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Divider(height: 5),
-                          const SizedBox(height: 10),
-                          RichText(
-                            text: const TextSpan(
-                                text: 'By placing an order you agree to our ',
-                                style: TextStyle(
-                                    color: Color(0xff7C7C7C), fontSize: 14),
-                                children: [
-                                  TextSpan(
-                                    text: 'Terms ',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14),
-                                  ),
-                                  TextSpan(
-                                    text: 'and ',
-                                    style: TextStyle(
-                                        color: Color(0xff7C7C7C),
-                                        fontSize: 14),
-                                  ),
-                                  TextSpan(
-                                    text: 'Conditions',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14),
-                                  ),
-                                ]),
-                          ),
-                          const SizedBox(height: 30),
-                          CustomButtonWidget(
-                            text: 'Place Order',
-                            action: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Orderacceptedscreen(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+                                );
+                              },
+                            ),
+                ),
+                CustomButtonWidget(
+                  text: 'Go To Checkout',
+                  action: () {
+                    // Handle checkout
+                  },
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

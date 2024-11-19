@@ -39,7 +39,7 @@ class CartService {
   Future<List<Cart>> fetchCartItems(int userId) async {
     // Make sure baseurl is defined correctly and ends with a slash
     final apiUrl = Uri.parse(
-        "$baseurl/viewsinglecart/$userId"); // Replace with your API URL
+        "$baseurl/viewSingleCart/$userId"); // Replace with your API URL
 
     print(userId);
 

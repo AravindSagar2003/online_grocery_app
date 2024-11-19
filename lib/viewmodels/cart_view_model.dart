@@ -5,7 +5,8 @@ import 'package:http/http.dart'
 import 'package:online_grocery_app_ui/models/cart_model.dart';
 import 'dart:convert';
 
-import 'package:online_grocery_app_ui/services/add_to_cart.dart'; // Import to parse the JSON response
+import 'package:online_grocery_app_ui/services/add_to_cart.dart';
+import 'package:online_grocery_app_ui/utils/api_constants.dart'; // Import to parse the JSON response
 
 class CartViewModel extends ChangeNotifier {
   final CartService _cartService = CartService();
@@ -30,9 +31,16 @@ class CartViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+
+      print(userId);
+
+      
       // Call the API function to add item to the cart
       final result =
           await _cartService.addToCart(itemId: itemId, userId: userId);
+          await fetchCartItems(int.parse(userId));
+          print(cartItems);
+         
 
       if (result['success']) {
         _success = true;
@@ -57,6 +65,8 @@ class CartViewModel extends ChangeNotifier {
 
     try {
       _cartItems = await _cartService.fetchCartItems(userId);
+      print('ooooooooooo');
+      print(_cartItems);
     } catch (error) {
       _cartItems = [];
       notifyListeners();
@@ -125,7 +135,7 @@ class CartViewModel extends ChangeNotifier {
       notifyListeners();
 
       final String apiUrl =
-          "https://fooddelivery-e7mz.onrender.com/deletecart/$id";
+          "$baseurl/$id";
       final response = await http.delete(Uri.parse(apiUrl));
       print(response.statusCode);
       if (response.statusCode == 200) {

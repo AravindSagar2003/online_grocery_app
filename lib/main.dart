@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:online_grocery_app_ui/routes/routename.dart';
 import 'package:online_grocery_app_ui/routes/routes.dart';
+import 'package:online_grocery_app_ui/viewmodels/Fetchall_products_view_model.dart';
 import 'package:online_grocery_app_ui/viewmodels/cart_view_model.dart';
 import 'package:online_grocery_app_ui/viewmodels/explore_view_model.dart';
 import 'package:online_grocery_app_ui/viewmodels/signin_view_model.dart';
@@ -18,6 +19,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SignInViewModel()),
         ChangeNotifierProvider(create: (_) => ExploreViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
+        ChangeNotifierProvider(create: (_) => ProductViewModel()),
+
 
       ],
       child: MaterialApp(

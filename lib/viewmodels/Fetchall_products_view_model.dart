@@ -26,7 +26,7 @@ class ProductViewModel extends ChangeNotifier {
       _errorMessage = error.toString();
     } finally {
       _isLoading = false;
-      notifyListeners();
+   
     }
   }
 
